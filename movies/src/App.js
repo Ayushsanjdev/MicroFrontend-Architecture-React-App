@@ -1,23 +1,31 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
+  const [movieImg, setmovieImg] = useState(null);
+
+  const fetchMovies = () => {
+    setmovieImg('');
+    fetch('https://dog.ceo/api/breeds/image/random')
+    .then(response => response.json())
+    .then(info => setmovieImg(info.message))
+  }
+
+  useEffect(() => {
+    if (movieImg === null) {
+      fetchMovies();
+    }
+  })
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        Search more dogs
       </header>
+      {movieImg !== '' ? (
+        <img src={movieImg} width="400px" alt="doggo"/>
+      ) : <p>loading img...</p>}
+      <button onClick={() => fetchMovies()}>Search</button>
     </div>
   );
 }
